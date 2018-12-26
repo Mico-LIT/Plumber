@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -53,10 +56,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Enum\SubjectStateType.cs" />
+    <Compile Include="Model\Enum\SubjectType.cs" />
+    <Compile Include="Model\Interface\ITybing.cs" />
+    <Compile Include="Model\Level\LevelSettings.cs" />
+    <Compile Include="Model\Level\TybingOption.cs" />
+    <Compile Include="Model\Point.cs" />
+    <Compile Include="Model\Subject\Brick.cs" />
+    <Compile Include="Model\Subject\Tybing4.cs" />
+    <Compile Include="Model\Subject\Tybing3.cs" />
+    <Compile Include="Model\Subject\Tybing1.cs" />
+    <Compile Include="Model\Subject\Tybing2.cs" />
     <Compile Include="Model\Coordinate.cs" />
-    <Compile Include="View\MapView.xaml.cs">
-      <DependentUpon>MapView.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Service\Level.cs" />
+    <Compile Include="Service\Map.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -69,15 +82,8 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\MapView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\CellType.cs" />
-    <Compile Include="Model\Map.cs" />
-    <Compile Include="Model\MapCell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -95,6 +101,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -119,7 +126,12 @@
     <Resource Include="Images2\Truba_22.png" />
     <Resource Include="Images2\Truba_33.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Truba_4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images2\Truba_44.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

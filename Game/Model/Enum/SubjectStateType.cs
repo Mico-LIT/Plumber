@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Game.Model
+namespace Game.Model.Enum
 {
-    public class Coordinate
+    public enum SubjectStateType
     {
-        public int[] X { get; set; }
-        public int[] Y { get; set; }
+        Normal,
+        Entry,
+        Exit
     }
 }

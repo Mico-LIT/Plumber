@@ -1,0 +1,15 @@
+﻿<Window x:Class="Game.BorderLiders"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Game"
+        mc:Ignorable="d" MaxHeight="500" MinHeight="500" MaxWidth="460" MinWidth="460"
+        Title="BorderLiders">
+    <StackPanel>
+        <TextBlock FontSize="20" Name="CurrentState"></TextBlock>
+        <ListBox Name="Players" Height="420">
+        </ListBox>
+        
+    </StackPanel>
+</Window>

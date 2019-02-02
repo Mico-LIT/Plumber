@@ -22,6 +22,8 @@ namespace Game.Model.Service
         {
             level1();
             level2();
+            level3();
+            level4();
         }
 
         static void level1()
@@ -91,5 +93,81 @@ namespace Game.Model.Service
             System.IO.File.WriteAllText("Level_2.json", level);
         }
 
+        static void level3()
+        {
+            var level = JsonConvert.SerializeObject(new LevelSettings()
+            {
+                IsLevelHorizontally = false,
+                Time = 30,
+                SizeMap = new Point() { Y = 7, X = 7 },
+                Tybings = new List<TybingOption>
+                {
+                 new TybingOption(){ Point = new Point(){Y = 6, X = 1}, SubjectType = SubjectType.Tybing1, SubjectState = SubjectStateType.Exit},
+                 new TybingOption(){ Point = new Point(){Y = 5, X = 1}, SubjectType = SubjectType.Tybing1},
+                 new TybingOption(){ Point = new Point(){Y = 4, X = 1}, SubjectType = SubjectType.Tybing1},
+                 new TybingOption(){ Point = new Point(){Y = 3, X = 1}, SubjectType = SubjectType.Tybing1},
+                 new TybingOption(){ Point = new Point(){Y = 2, X = 1}, SubjectType = SubjectType.Tybing2},
+                 new TybingOption(){ Point = new Point(){Y = 2, X = 2}, SubjectType = SubjectType.Tybing2},
+                 new TybingOption(){ Point = new Point(){Y = 3, X = 2}, SubjectType = SubjectType.Tybing1},
+                 new TybingOption(){ Point = new Point(){Y = 4, X = 2}, SubjectType = SubjectType.Tybing2},
+
+                 new TybingOption(){ Point = new Point(){Y = 4, X = 2}, SubjectType = SubjectType.Tybing2},
+                 new TybingOption(){ Point = new Point(){Y = 4, X = 3}, SubjectType = SubjectType.Tybing1},
+
+                 new TybingOption(){ Point = new Point(){Y = 4, X = 4}, SubjectType = SubjectType.Tybing1},
+                 new TybingOption(){ Point = new Point(){Y = 4, X = 5}, SubjectType = SubjectType.Tybing3},
+
+                 new TybingOption(){ Point = new Point(){Y = 4, X = 5}, SubjectType = SubjectType.Tybing2},
+                 new TybingOption(){ Point = new Point(){Y = 3, X = 5}, SubjectType = SubjectType.Tybing1},
+                 new TybingOption(){ Point = new Point(){Y = 2, X = 5}, SubjectType = SubjectType.Tybing1},
+                 new TybingOption(){ Point = new Point(){Y = 1, X = 5}, SubjectType = SubjectType.Tybing2},
+
+                 new TybingOption(){ Point = new Point(){Y = 1, X = 4}, SubjectType = SubjectType.Tybing1},
+                 new TybingOption(){ Point = new Point(){Y = 1, X = 3}, SubjectType = SubjectType.Tybing2},
+
+                 new TybingOption(){ Point = new Point(){Y = 0, X = 3}, SubjectType = SubjectType.Tybing1, SubjectState = SubjectStateType.Entry},
+                }
+            });
+
+            System.IO.File.WriteAllText("Level_3.json", level);
+        }
+
+        static void level4()
+        {
+            var level = JsonConvert.SerializeObject(new LevelSettings()
+            {
+                IsLevelHorizontally = true,
+                Time = 60,
+                SizeMap = new Point() { Y = 7, X = 7 },
+                Tybings = new List<TybingOption>
+                {
+                 new TybingOption(){ Point = new Point(){Y = 6, X = 0}, SubjectType = SubjectType.Tybing1, SubjectState = SubjectStateType.Entry},
+                 new TybingOption(){ Point = new Point(){Y = 6, X = 1}, SubjectType = SubjectType.Tybing3},
+                 new TybingOption(){ Point = new Point(){Y = 6, X = 2}, SubjectType = SubjectType.Tybing2},
+
+                 new TybingOption(){ Point = new Point(){Y = 5, X = 1}, SubjectType = SubjectType.Tybing2},
+                 new TybingOption(){ Point = new Point(){Y = 5, X = 2}, SubjectType = SubjectType.Tybing4},
+                 new TybingOption(){ Point = new Point(){Y = 5, X = 3}, SubjectType = SubjectType.Tybing2},
+
+                 new TybingOption(){ Point = new Point(){Y = 4, X = 2}, SubjectType = SubjectType.Tybing3},
+                 new TybingOption(){ Point = new Point(){Y = 4, X = 3}, SubjectType = SubjectType.Tybing3},
+                 new TybingOption(){ Point = new Point(){Y = 4, X = 4}, SubjectType = SubjectType.Tybing2},
+
+                 new TybingOption(){ Point = new Point(){Y = 3, X = 2}, SubjectType = SubjectType.Tybing2},
+                 new TybingOption(){ Point = new Point(){Y = 3, X = 3}, SubjectType = SubjectType.Tybing3},
+                 new TybingOption(){ Point = new Point(){Y = 3, X = 4}, SubjectType = SubjectType.Tybing2},
+
+
+                 new TybingOption(){ Point = new Point(){Y = 2, X = 3}, SubjectType = SubjectType.Tybing2},
+                 new TybingOption(){ Point = new Point(){Y = 2, X = 4}, SubjectType = SubjectType.Tybing2},
+
+                 new TybingOption(){ Point = new Point(){Y = 1, X = 4}, SubjectType = SubjectType.Tybing2},
+                 new TybingOption(){ Point = new Point(){Y = 1, X = 5}, SubjectType = SubjectType.Tybing1},
+                 new TybingOption(){ Point = new Point(){Y = 1, X = 6}, SubjectType = SubjectType.Tybing1, SubjectState = SubjectStateType.Exit},
+                }
+            });
+
+            System.IO.File.WriteAllText("Level_4.json", level);
+        }
     }
 }

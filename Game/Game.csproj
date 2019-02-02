@@ -56,12 +56,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BorderLiders.xaml.cs">
+      <DependentUpon>BorderLiders.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\Enum\SubjectStateType.cs" />
     <Compile Include="Model\Enum\SubjectType.cs" />
     <Compile Include="Model\Interface\ITybing.cs" />
     <Compile Include="Model\Level\LevelSettings.cs" />
     <Compile Include="Model\Level\TybingOption.cs" />
     <Compile Include="Model\Point.cs" />
+    <Compile Include="Model\Session\Player.cs" />
+    <Compile Include="Model\Session\SavePoint.cs" />
     <Compile Include="Model\Subject\Brick.cs" />
     <Compile Include="Model\Subject\Tybing4.cs" />
     <Compile Include="Model\Subject\Tybing3.cs" />
@@ -70,6 +75,11 @@
     <Compile Include="Model\Coordinate.cs" />
     <Compile Include="Service\Level.cs" />
     <Compile Include="Service\Map.cs" />
+    <Compile Include="Service\Session.cs" />
+    <Page Include="BorderLiders.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

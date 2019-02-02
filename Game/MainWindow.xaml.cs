@@ -1,8 +1,10 @@
 ﻿using Game.Model;
 using Game.Model.Interface;
 using Game.Model.Service;
+using Game.Service;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,12 +44,46 @@ namespace Game
         public MainWindow()
         {
             InitializeComponent();
+            StartUp();
+        }
+
+
+        public void StartUp()
+        {
             Level.SaveAllLevel();
 
             Map.Water += Water;
 
             timer.Tick += timer_Tick;
             timer.Interval = new TimeSpan(0, 0, 0, 1, 0);
+
+            GlobalMenu.Items.Cast<MenuItem>().ToList().ForEach(x => x.IsEnabled = false);
+
+        }
+
+        private void loadingSession()
+        {
+            if (Session.IsSession())
+            {
+                var result = MessageBox.Show("Есть сохранение Загрузить?", "", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                if (result == MessageBoxResult.OK)
+                {
+                    Session.GetSavePoin();
+                    // загрузка сессии
+                    Session.GetSavePoin();
+                    this.ClerGrid();
+                    this.DrowGrid();
+                    timer.Start();
+                    GlobalMenu.Items.Cast<MenuItem>().ToList().ForEach(x => x.IsEnabled = true);
+                }
+                else
+                {
+                    Session.DeleteSession();
+                }
+
+                Session.CorrectBorderLiders();
+            }
+
         }
 
         /// <summary>
@@ -61,23 +97,23 @@ namespace Game
             var findTybing = GridMapTybing.Children.Cast<UIElement>().First(h => Grid.GetRow(h) == y && Grid.GetColumn(h) == x);
             var image = findTybing as Image;
 
-                switch (Map.MapTybings[y, x].TubingType)
-                {
-                    case Model.Enum.SubjectType.Tybing1:
-                        image.Source = new BitmapImage(new Uri(!isReset? Tybing1Water : Tybing1NonWater, UriKind.Relative));
-                        break;
-                    case Model.Enum.SubjectType.Tybing2:
-                        image.Source = new BitmapImage(new Uri(!isReset ? Tybing2Water : Tybing2NonWater, UriKind.Relative));
-                        break;
-                    case Model.Enum.SubjectType.Tybing3:
-                        image.Source = new BitmapImage(new Uri(!isReset ? Tybing3Water : Tybing3NonWater, UriKind.Relative));
-                        break;
-                    case Model.Enum.SubjectType.Tybing4:
-                        image.Source = new BitmapImage(new Uri(!isReset ? Tybing4Water : Tybing4NonWater, UriKind.Relative));
-                        break;
-                    default:
-                        break;
-                }
+            switch (Map.MapTybings[y, x].TubingType)
+            {
+                case Model.Enum.SubjectType.Tybing1:
+                    image.Source = new BitmapImage(new Uri(!isReset ? Tybing1Water : Tybing1NonWater, UriKind.Relative));
+                    break;
+                case Model.Enum.SubjectType.Tybing2:
+                    image.Source = new BitmapImage(new Uri(!isReset ? Tybing2Water : Tybing2NonWater, UriKind.Relative));
+                    break;
+                case Model.Enum.SubjectType.Tybing3:
+                    image.Source = new BitmapImage(new Uri(!isReset ? Tybing3Water : Tybing3NonWater, UriKind.Relative));
+                    break;
+                case Model.Enum.SubjectType.Tybing4:
+                    image.Source = new BitmapImage(new Uri(!isReset ? Tybing4Water : Tybing4NonWater, UriKind.Relative));
+                    break;
+                default:
+                    break;
+            }
         }
 
         void image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -110,9 +146,11 @@ namespace Game
                 if (Map.IsCompletedAllConnectedTybing)
                 {
                     timer.Stop();
+                    Session.WriteRecord(Map.NameLevel, (int)Map.Time.TotalSeconds, (int)Map.TravelTime.TotalSeconds);
+
+
                     MessageBox.Show("Ты выиграл!");
                     GridMapTybing.IsEnabled = false;
-                    
                 }
                 else
                 {
@@ -121,7 +159,6 @@ namespace Game
                         timer.Stop();
                         MessageBox.Show("Время вышло! вы проиграли");
                         GridMapTybing.IsEnabled = false;
-                        
                     }
                     else
                     {
@@ -187,12 +224,15 @@ namespace Game
                             break;
                         case Model.Enum.SubjectType.Tybing2:
                             image.Source = new BitmapImage(new Uri(Tybing2NonWater, UriKind.Relative));
+                            image.RenderTransform = new RotateTransform(Map.MapTybings[y, x].Rotation);
                             break;
                         case Model.Enum.SubjectType.Tybing3:
                             image.Source = new BitmapImage(new Uri(Tybing3NonWater, UriKind.Relative));
+                            image.RenderTransform = new RotateTransform(Map.MapTybings[y, x].Rotation);
                             break;
                         case Model.Enum.SubjectType.Tybing4:
                             image.Source = new BitmapImage(new Uri(Tybing4NonWater, UriKind.Relative));
+                            image.RenderTransform = new RotateTransform(Map.MapTybings[y, x].Rotation);
                             break;
                         case Model.Enum.SubjectType.Brick:
                             image.Source = new BitmapImage(new Uri(Brick, UriKind.Relative));
@@ -220,7 +260,7 @@ namespace Game
 
         void timer_Tick(object sender, EventArgs e)
         {
-            Time.Header = string.Format("|Время| {0}",Map.TravelTime.ToString(@"mm\:ss"));
+            Time.Header = string.Format("|Время| {0}", Map.TravelTime.ToString(@"mm\:ss"));
 
             if (Map.TravelTime.Ticks == 0)
             {
@@ -230,6 +270,76 @@ namespace Game
             }
 
             Map.TravelTime = Map.TravelTime.Add(TimeSpan.FromSeconds(-1));
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (Session.IsNameLiderBords(nik.Text.ToUpper()))
+            {
+                MessageBox.Show("Имя такое есть. нужно уникальное");
+                return;
+            }
+
+            GlobalMenu.Items.Cast<MenuItem>().ToList().ForEach(x => x.IsEnabled = true);
+
+            p2.Visibility = Visibility.Hidden;
+            p1.Visibility = Visibility.Visible;
+        }
+
+        private void BorderLider_Click(object sender, RoutedEventArgs e)
+        {
+            BorderLiders borderLiders = new BorderLiders();
+            borderLiders.ShowDialog();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            Session.SetBorderLiders();
+
+            //Session.SaveS - нужен именно для этой штуки
+            Session.DeleteSession();
+            base.OnClosed(e);
+        }
+
+        private void SavePoint_Click(object sender, RoutedEventArgs e)
+        {
+            timer.Stop();
+
+            var result = MessageBox.Show("Сохранить и выйти?", "",
+         MessageBoxButton.OKCancel, MessageBoxImage.Information);
+
+            if (result == MessageBoxResult.OK)
+            {
+                Session.SaveS = true;
+                timer.Stop();
+                Session.SavePoin();
+                this.Close();
+                return;
+            }
+            timer.Start();
+        }
+
+        private void MainWindows_Loaded(object sender, RoutedEventArgs e)
+        {
+            loadingSession();
+        }
+
+        private void Lave3_Click(object sender, RoutedEventArgs e)
+        {
+            ClerGrid();
+            Map.Level(3);
+            DrowGrid();
+
+            timer.Start();
+        }
+
+        private void Lave4_Click(object sender, RoutedEventArgs e)
+        {
+            ClerGrid();
+            Map.Level(4);
+            DrowGrid();
+
+            timer.Start();
         }
     }
 }

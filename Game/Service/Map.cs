@@ -17,7 +17,7 @@ namespace Game.Model.Service
         static public water Water { get; set; }
 
         // Настройки
-        static bool OptionsAllConnectedTybing { get; } = true;
+        static public bool OptionsAllConnectedTybing { get; } = true;
         static public bool IsCompletedAllConnectedTybing { get; set; } = true; // флаг (меняется автоматом)
         //
 
@@ -25,11 +25,14 @@ namespace Game.Model.Service
         static internal int SizeX { get; set; }= 10;
         static internal int SizeY { get; set; } = 10;
 
-        static Point StartTybing { get; set; } = new Point() { Y = 0, X = 0 };
-        static Point FinishTybing { get; set; } = new Point() { Y = SizeY - 1, X = SizeX - 1 };
+        static internal Point StartTybing { get; set; } = new Point() { Y = 0, X = 0 };
+        static internal Point FinishTybing { get; set; } = new Point() { Y = SizeY - 1, X = SizeX - 1 };
 
         static public ITybing[,] MapTybings = new ITybing[SizeY, SizeX];
+
         static public TimeSpan TravelTime { get; set; } = TimeSpan.FromSeconds(10);
+        static public TimeSpan Time { get; set; }
+        static public string NameLevel { get; set; }
         //
 
         /// <param name="IsLevelHorizontally"> как мы будем проходить уровень?</param>
@@ -76,7 +79,7 @@ namespace Game.Model.Service
 
                 for (int x = 0; x < SizeX; x++)
                 {
-                    MapTybings[SizeY - 1, x] = new Brick(0, x);
+                    MapTybings[SizeY - 1, x] = new Brick(SizeY - 1, x);
                 }
             }
             else
@@ -88,7 +91,7 @@ namespace Game.Model.Service
 
                 for (int y = 0; y < SizeY; y++)
                 {
-                    MapTybings[y, SizeY - 1] = new Brick(y, 0);
+                    MapTybings[y, SizeY - 1] = new Brick(y, SizeY - 1);
                 }
             }
 
@@ -116,7 +119,7 @@ namespace Game.Model.Service
             if (tybing == null)
             {
                 if (MapTybings[StartTybing.Y, StartTybing.X].DirectCoordinate.Y != null)
-                    foreach (var Y in MapTybings[0, 0].DirectCoordinate.Y)
+                    foreach (var Y in MapTybings[StartTybing.Y, StartTybing.X].DirectCoordinate.Y)
                     {
                         if (IsValidDirect(Y, StartTybing.X, MapTybings[StartTybing.Y, StartTybing.X]))
                         {
@@ -235,12 +238,15 @@ namespace Game.Model.Service
         {
             try
             {
-                var levelSettings = Service.Level.Dowloond(string.Format("Level_{0}.json", i));
+                string nameLevel = string.Format("Level_{0}.json", i);
+
+                var levelSettings = Service.Level.Dowloond(nameLevel);
 
                 SizeX = levelSettings.SizeMap.X;
                 SizeY = levelSettings.SizeMap.Y;
 
-                TravelTime = TimeSpan.FromSeconds(levelSettings.Time);
+                TravelTime = Time = TimeSpan.FromSeconds(levelSettings.Time);
+                Map.NameLevel = nameLevel;
 
                 MapTybings = new ITybing[SizeY, SizeX];
 
@@ -293,6 +299,8 @@ namespace Game.Model.Service
                     return new Tybing2(y, x, rotation: rotation, subjectstate: subjectState);
                 case SubjectType.Tybing3:
                     return new Tybing3(y, x, rotation: rotation, subjectstate: subjectState);
+                case SubjectType.Tybing4:
+                    return new Tybing4(y, x, rotation: rotation, subjectstate: subjectState);
                 case SubjectType.Brick:
                     return new Brick(y, x);
                 default:
